@@ -1,10 +1,9 @@
-# .github/workflows/ci-cd.yml
 name: CI-CD Pipeline
 
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the main 
+      - main  # Trigger on pushes to the main branch
 
 jobs:
   build:
@@ -44,10 +43,15 @@ jobs:
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
 
+    - name: Install kubectl
+      run: |
+        curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+        chmod +x ./kubectl
+        sudo mv ./kubectl /usr/local/bin/kubectl
+
     - name: Set up Google Cloud SDK
       run: |
-        gcloud components install kubectl
-        gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --region ${{ secrets.GKE_REGION }}
+        gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --region ${{ secrets.GKE_REGION }} --project ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Deploy to GKE
       run: |
