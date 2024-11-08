@@ -43,19 +43,12 @@ jobs:
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-    - name: Install kubectl
-      run: |
-        curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-        chmod +x ./kubectl
-        sudo mv ./kubectl /usr/local/bin/kubectl
-
-    - name: Install GKE gcloud auth plugin
-      run: |
-        curl -LO https://github.com/google-gke-gcloud-auth-plugin/releases/download/v0.2.0/gke-gcloud-auth-plugin-linux-amd64
-        chmod +x ./gke-gcloud-auth-plugin-linux-amd64
-        sudo mv ./gke-gcloud-auth-plugin-linux-amd64 /usr/local/bin/gke-gcloud-auth-plugin
-
     - name: Set up Google Cloud SDK
+      run: |
+        # Install kubectl using the Google Cloud SDK
+        gcloud components install kubectl
+
+    - name: Configure gcloud to access GKE cluster
       run: |
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --region ${{ secrets.GKE_REGION }} --project ${{ secrets.GCP_PROJECT_ID }}
 
