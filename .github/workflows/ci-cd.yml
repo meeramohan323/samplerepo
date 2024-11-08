@@ -52,14 +52,15 @@ jobs:
 
     - name: Install the Google Cloud SDK
       run: |
-        # Install the Google Cloud SDK
         echo "Installing Google Cloud SDK..."
+        
+        # Add the Google Cloud SDK APT repository to sources list
         echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+        
+        # Download the public key and store it in the correct location
         curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo tee /usr/share/keyrings/cloud.google.gpg
         
-        # Import the missing GPG key (C0BA5CE6DC6315A3)
-        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C0BA5CE6DC6315A3
-
+        # Install the Google Cloud SDK
         sudo apt-get update
         sudo apt-get install google-cloud-sdk
 
