@@ -50,8 +50,8 @@ jobs:
           sudo apt-get update && sudo apt-get install -y kubectl
         fi
         
-        # Install the gke-gcloud-auth-plugin
-        gcloud components install gke-gcloud-auth-plugin
+        # Install the gke-gcloud-auth-plugin using apt-get
+        sudo apt-get install -y google-cloud-cli-gke-gcloud-auth-plugin
 
     - name: Configure gcloud to access GKE cluster
       run: |
