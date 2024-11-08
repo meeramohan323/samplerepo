@@ -43,12 +43,15 @@ jobs:
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-    - name: Set up Google Cloud SDK
+    - name: Install kubectl and gke-gcloud-auth-plugin
       run: |
-        # Optionally install kubectl if it's not available
+        # Install kubectl if not already installed
         if ! command -v kubectl &> /dev/null; then
           sudo apt-get update && sudo apt-get install -y kubectl
         fi
+        
+        # Install the gke-gcloud-auth-plugin
+        gcloud components install gke-gcloud-auth-plugin
 
     - name: Configure gcloud to access GKE cluster
       run: |
