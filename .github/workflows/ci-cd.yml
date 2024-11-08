@@ -1,3 +1,4 @@
+# .github/workflows/ci-cd.yml
 name: CI-CD Pipeline
 
 on:
@@ -43,34 +44,10 @@ jobs:
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-    - name: Install kubectl
+    - name: Set up Google Cloud SDK
       run: |
-        # Install kubectl if not already installed
-        if ! command -v kubectl &> /dev/null; then
-          sudo apt-get update && sudo apt-get install -y kubectl
-        fi
-
-    - name: Install the Google Cloud SDK
-      run: |
-        echo "Installing Google Cloud SDK..."
-        
-        # Add the Google Cloud SDK APT repository to sources list
-        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-        
-        # Download the public key and store it in the correct location
-        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo tee /usr/share/keyrings/cloud.google.gpg
-        
-        # Install the Google Cloud SDK
-        sudo apt-get update
-        sudo apt-get install google-cloud-sdk
-
-    - name: Install the GKE gcloud auth plugin
-      run: |
-        sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin
-
-    - name: Configure gcloud to access GKE cluster
-      run: |
-        gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --region ${{ secrets.GKE_REGION }} --project ${{ secrets.GCP_PROJECT_ID }}
+        gcloud components install kubectl
+        gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --region ${{ secrets.GKE_REGION }}
 
     - name: Deploy to GKE
       run: |
