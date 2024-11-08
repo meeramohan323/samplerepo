@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: my-sample-app
-        image: gcr.io/YOUR_PROJECT_ID/my-sample-app:latest
+        image: gcr.io/stone-chariot-439615-n0/my-sample-app:latest
         ports:
         - containerPort: 3000
 ---
