@@ -45,8 +45,10 @@ jobs:
 
     - name: Set up Google Cloud SDK
       run: |
-        # Install kubectl using the Google Cloud SDK
-        gcloud components install kubectl
+        # Optionally install kubectl if it's not available
+        if ! command -v kubectl &> /dev/null; then
+          sudo apt-get update && sudo apt-get install -y kubectl
+        fi
 
     - name: Configure gcloud to access GKE cluster
       run: |
